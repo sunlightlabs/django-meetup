@@ -1,7 +1,7 @@
 from distutils.core import setup
 from meetup import __version__
 
-readme = open('README.txt').read()
+readme = open('README.rst').read()
 
 setup(
     name="django-meetup",

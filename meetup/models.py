@@ -33,7 +33,7 @@ class Event(models.Model):
     address = models.CharField(max_length=128, blank=True)
     city = models.CharField(max_length=64, blank=True)
     state = models.CharField(max_length=64, blank=True)
-    zipcode = models.CharField(max_length=5, blank=True)
+    zipcode = models.CharField(max_length=10, blank=True)
     latitude = models.CharField(max_length=16, blank=True)
     longitude = models.CharField(max_length=16, blank=True)
     url = models.URLField(verify_exists=False, max_length=255, blank=True)

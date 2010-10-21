@@ -13,6 +13,16 @@ for c in getattr(settings, 'MEETUP_CATEGORIES', []):
     elif isinstance(c, basestring):
         CATEGORIES.append((c, c))
 
+class Account(models.Model):
+    key = models.CharField(max_length=128)
+    description = models.CharField(max_length=128)
+    slug = models.SlugField()
+    container_id = models.CharField(max_length=16, blank=True)
+    sync = models.BooleanField(default=True)
+    
+    def __unicode__(self):
+        return self.slug
+
 class EventManager(models.Manager):
     def upcoming(self):
         return Event.objects.filter(status='upcoming')
@@ -22,6 +32,8 @@ class EventManager(models.Manager):
 class Event(models.Model):
     
     objects = EventManager()
+    
+    account = models.ForeignKey(Account, related_name="events")
     
     # Meetup.com fields
     id = models.CharField(max_length=255, primary_key=True)
@@ -47,7 +59,7 @@ class Event(models.Model):
     category = models.CharField(max_length=32, blank=True, default='', choices=CATEGORIES)
     
     class Meta:
-        ordering = ('-timestamp',)
+        ordering = ('start_time',)
     
     def __unicode__(self):
         return self.pk
@@ -55,7 +67,7 @@ class Event(models.Model):
     def save(self, sync=True, **kwargs):
         super(Event, self).save(**kwargs)
         if sync:
-            api_client = MeetupClient(API_KEY)
+            api_client = MeetupClient(self.account.key)
             api_client.update_event(self.pk, udf_category=self.category)
     
     def city_state(self):

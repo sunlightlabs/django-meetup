@@ -7,6 +7,6 @@ class AccountAdmin(admin.ModelAdmin):
 admin.site.register(Account, AccountAdmin)
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('id','category','status','start_time','location','city_state','short_description','organizer_name','rsvp_count')
-    list_filter = ('status','category','account')
+    list_display = ('id','status','start_time','location','city_state','short_description','organizer_name','rsvp_count')
+    list_filter = ('status','account')
 admin.site.register(Event, EventAdmin)

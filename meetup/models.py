@@ -6,13 +6,6 @@ import datetime
 STATUSES = [(s, s) for s in ('past','pending','upcoming')]
 API_KEY = getattr(settings, 'MEETUP_KEY', None)
 
-CATEGORIES = []
-for c in getattr(settings, 'MEETUP_CATEGORIES', []):
-    if isinstance(c, (list, tuple)) and len(c) == 2:
-        CATEGORIES.append(c)
-    elif isinstance(c, basestring):
-        CATEGORIES.append((c, c))
-
 class Account(models.Model):
     key = models.CharField(max_length=128)
     description = models.CharField(max_length=128)
@@ -56,7 +49,7 @@ class Event(models.Model):
     organizer_name = models.CharField(max_length=128, blank=True)
     
     # user defined fields
-    category = models.CharField(max_length=32, blank=True, default='', choices=CATEGORIES)
+    # none for now, add tags later
     
     class Meta:
         ordering = ('start_time',)
@@ -66,9 +59,9 @@ class Event(models.Model):
     
     def save(self, sync=True, **kwargs):
         super(Event, self).save(**kwargs)
-        if sync:
-            api_client = MeetupClient(self.account.key)
-            api_client.update_event(self.pk, udf_category=self.category)
+        # if sync:
+        #     api_client = MeetupClient(self.account.key)
+        #     api_client.update_event(self.pk, udf_category=self.category)
     
     def city_state(self):
         if self.city:

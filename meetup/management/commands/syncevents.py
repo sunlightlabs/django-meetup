@@ -34,7 +34,7 @@ class Command(BaseCommand):
         
                 client = MeetupClient(account.key)
         
-                resp = client.container_events(account.container_id, extra_fields='rsvp_count,udf_category')
+                resp = client.container_events(account.container_id, extra_fields='rsvp_count')
         
                 remote_ids = []
         
@@ -69,7 +69,6 @@ class Command(BaseCommand):
                         ev.organizer_name = organizer['name']
             
                     # user defined fields
-                    ev.category = res.get('udf_category', '')
             
                     if ev.id:
                         print "* updated local event %s" % ev.pk

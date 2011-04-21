@@ -15,12 +15,18 @@ class Account(models.Model):
     
     def __unicode__(self):
         return self.slug
+    
+    def past_events(self):
+        return self.events.filter(status='past')
+    
+    def upcoming_events(self):
+        return self.events.filter(status='upcoming')
 
 class EventManager(models.Manager):
-    def upcoming(self):
-        return Event.objects.filter(status='upcoming')
     def past(self):
         return Event.objects.filter(status='past')
+    def upcoming(self):
+        return Event.objects.filter(status='upcoming')
 
 class Event(models.Model):
     

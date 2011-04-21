@@ -25,10 +25,14 @@ class MeetupClient(object):
     
     def _get(self, url, params):
         url = "%s?%s" % (url, urlencode(params))
-        return json.load(urlopen(url))
+        content = urlopen(url).read()
+        content = unicode(content, 'utf-8', 'ignore')
+        return json.loads(content)
         
     def _post(self, url, params):
-        return json.load(urlopen(url, urlencode(params)))
+        content = urlopen(url, urlencode(params)).read()
+        content = unicode(content, 'utf-8', 'ignore')
+        return json.load(content)
     
     def find_containers(self, name):
         return self._invoke('containers', {'urlname': name})

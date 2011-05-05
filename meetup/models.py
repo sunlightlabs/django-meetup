@@ -11,6 +11,7 @@ class Account(models.Model):
     description = models.CharField(max_length=128)
     slug = models.SlugField()
     container_id = models.CharField(max_length=16, blank=True)
+    meetup_url = models.URLField(verify_exists=False, blank=True)
     sync = models.BooleanField(default=True)
     
     def __unicode__(self):
@@ -20,13 +21,13 @@ class Account(models.Model):
         return self.events.filter(status='past')
     
     def upcoming_events(self):
-        return self.events.filter(status='upcoming')
+        return self.events.exclude(status='past')
 
 class EventManager(models.Manager):
     def past(self):
         return Event.objects.filter(status='past')
     def upcoming(self):
-        return Event.objects.filter(status='upcoming')
+        return Event.objects.exclude(status='past')
 
 class Event(models.Model):
     
